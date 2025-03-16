@@ -6,12 +6,18 @@
 
 #define ALPHABET_SIZE 26
 
-
+/**
+ * define TrieNode structure 
+ */
 typedef struct TrieNode{
-    struct TrieNode* Children[ALPHABET_SIZE];
-    bool IsEndofWorld;
+    struct TrieNode* Children[ALPHABET_SIZE]; //Array of pointers to child nodes
+    bool IsEndofWorld; // To mark if this node represents the end of a word
 }TrieNode;
 
+
+/**
+ * Function to create a new Trie node
+ */
 TrieNode* CreateTrieNode(){
     TrieNode* node = (TrieNode*)malloc(sizeof(TrieNode));
     node->IsEndofWorld = false;
@@ -22,7 +28,9 @@ TrieNode* CreateTrieNode(){
     return node;
 }
 
-
+/**
+ * Insert a word into the trie
+ */
 void insert(TrieNode* root, const char* word)
 {
     TrieNode* current = root;
@@ -38,7 +46,9 @@ void insert(TrieNode* root, const char* word)
     current->IsEndofWorld = true;
 
 }
-
+/**
+ * Search for a word in the Trie
+ */
 bool search(TrieNode *root, const char* word){
     TrieNode* current = root;
     while(*word){
@@ -52,6 +62,9 @@ bool search(TrieNode *root, const char* word){
     return current != NULL && current->IsEndofWorld;
 }
 
+/**
+ * Helper function to check if a node has children
+ */
 bool hasChildren(TrieNode* node){
     for (int i = 0; i < ALPHABET_SIZE; i++){
         if(node->Children[i]) return true;
@@ -60,7 +73,9 @@ bool hasChildren(TrieNode* node){
     return false;
 }
 
-
+/**
+ * Delete a word from the trie
+ */
 bool Delete(TrieNode* root, const char* word, int depth){
     if(!root) return false;
 
@@ -84,12 +99,31 @@ bool Delete(TrieNode* root, const char* word, int depth){
     return false;
 }
 
-// wrapper function to delete a word
+/*
+* wrapper function to delete a word
+*/
 void deleteWord(TrieNode* root, const char* word){
     Delete(root, word, 0);
 }
 
-// free the trie memory
+/**
+ * Display Trie for debugging
+ */
+void display(TrieNode* root, char str[], int level){
+    if(root->IsEndofWorld){
+        str[level] = '\0';
+        printf("%s", str);
+    }
+    for (int i = 0; i < ALPHABET_SIZE; i++){
+        if(root->Children[i]){
+            str[level] = i + 'a';
+            display(root->Children[i], str, level + 1);
+        }
+    }
+}
+/*
+*free the trie memory
+*/
 void freeTrie(TrieNode* root){
     if(!root) return;
     for (int i = 0; i < ALPHABET_SIZE; i++){
