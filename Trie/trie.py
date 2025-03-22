@@ -29,8 +29,8 @@ class Trie:
     
     def delete(self, word):
         def _delete(node, word, depth):
-            if depth == len(word) - 1:
-                if node.isEndofWord:
+            if depth == len(word):
+                if not node.isEndofWord:
                     return False #word not found
                 node.isEndofWord = False
                 return len(node.children) == 0
@@ -43,7 +43,7 @@ class Trie:
             
             if should_delete:
                 del node.children[char]
-                return len(node.children[char]) == 0
+                return len(node.children) == 0
             
             return False
         
